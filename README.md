@@ -18,7 +18,7 @@ $ python3 server.py
 Example output:
 
 ```code
-The server is ready and up
+Starting server ...
 Server name: 127.0.0.1
 ```
 
