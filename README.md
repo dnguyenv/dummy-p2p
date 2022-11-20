@@ -79,7 +79,7 @@ Title: RFC1.txt
 If info found:
 
 ```code
-Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 GET
 Enter RFC Number
 1
@@ -88,24 +88,35 @@ RFC1.txt
 LOOKUP Request to be sent to the server for completing the GET request
 LOOKUP RFC 1 P2P-CI/1.0
 Host: 127.0.0.1
-Port: 60464
+Port: 60824
 Title: RFC1.txt
 
 LOOKUP Response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60231
+RFC 1 RFC1.txt 127.0.0.1 60824
 
-GET Request to be sent to the peer holding the RFC File
+GET request to be sent to the peer holding the RFC file
 GET RFC 1 P2P-CI/1.0
 Host: 127.0.0.1
-OS: macOS-12.3-arm64-arm-64bit
+OS: macOS-12.6-arm64-arm-64bit
 
-Enter if you want to: ADD, GET, LIST, LOOKUP or EXIT:
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 Connection with peer established
+GET message response:
 P2P-CI/1.0 200 OK
+Date: Sun, 20 Nov 2022 20:39:58 GMT
+OS: macOS-12.6-arm64-arm-64bit
+Last-Modified: Sun Nov 20 13:41:09 2022
+Content-Length: 21082
+Content-Type: text/plain
+
+Network Working Group                                   Steve Crocker
+Request for Comments: 1                                          UCLA
+                                                         7 April 1969
+........ more data here .........
+
 File Received from peer and stored locally now
 ```
-
 
 If there is no info found:
 ```code
@@ -133,22 +144,20 @@ P2P-CI/1.0 404 Not Found
 peer side:
 
 ```code
-python3 peer.py 7734 127.0.0.1
-Connected to server at address: 127.0.0.1 and port: 7734
-Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
+$ python3 peer.py 7734 localhost
+Connected to server at address: localhost and port: 7734
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 LIST
-LIST Request to be sent to the server
+LIST request to be sent to the server
 LIST ALL P2P-CI/1.0
 Host: 127.0.0.1
-Port: 60887
+Port: 60953
 
 LIST Response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60650
-RFC 1 RFC1.txt 127.0.0.1 60650
-RFC 2 RFC2.txt 127.0.0.1 60650
-RFC 3 RFC3.txt 127.0.0.1 60650
-RFC 13 RFC13.txt 127.0.0.1 60650
+RFC 1 RFC1.txt 127.0.0.1 60824
+RFC 3 RFC3.txt 127.0.0.1 60300
+RFC 13 RFC13.txt 127.0.0.1 60953
 
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
 ```
@@ -167,29 +176,73 @@ Port: 60887
 Client side:
 
 ```code
-Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 LOOKUP
 Enter RFC Number
-13
+1
 Enter Title
-RFC13.txt
-LOOKUP Request to be sent to the server
-LOOKUP RFC 13 P2P-CI/1.0
+RFC1.txt
+LOOKUP request to be sent to the server
+LOOKUP RFC 1 P2P-CI/1.0
 Host: 127.0.0.1
-Port: 60650
-Title: RFC13.txt
+Port: 60953
+Title: RFC1.txt
 
-LOOKUP Response sent from the server
+Retrieving response sent from the server
 P2P-CI/1.0 200 OK
-RFC 13 RFC13.txt 127.0.0.1 60650
+RFC 1 RFC1.txt 127.0.0.1 60824
+
 ```
 
 Server side:
 
 ```code
 Request received from the client
-LOOKUP RFC 13 P2P-CI/1.0
+LOOKUP RFC 1 P2P-CI/1.0
 Host: 127.0.0.1
-Port: 60650
-Title: RFC13.txt
+Port: 60953
+Title: RFC1.txt
+```
+
+### EXIT
+
+This command is issued from one of the active peers. From a random peer, issue a `LIST` command first to list all the peers in the system to verify:
+
+```code
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
+LIST
+LIST request to be sent to the server
+LIST ALL P2P-CI/1.0
+Host: 127.0.0.1
+Port: 60824
+
+LIST Response sent from the server
+P2P-CI/1.0 200 OK
+RFC 1 RFC1.txt 127.0.0.1 60824
+RFC 3 RFC3.txt 127.0.0.1 60300
+RFC 13 RFC13.txt 127.0.0.1 60953
+```
+
+We see that there currently are 3 active peers in the system. Now issue an EXIT command for a peer:
+
+```code
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
+EXIT
+```
+
+and check the LIST command again from 1 of remaining peers, the resources associated with the EXITed peer should be removed out of the list
+
+```code
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
+LIST
+LIST request to be sent to the server
+LIST ALL P2P-CI/1.0
+Host: 127.0.0.1
+Port: 60953
+
+LIST Response sent from the server
+P2P-CI/1.0 200 OK
+RFC 1 RFC1.txt 127.0.0.1 60824
+RFC 13 RFC13.txt 127.0.0.1 60953
+
 ```
