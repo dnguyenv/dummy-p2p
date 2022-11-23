@@ -13,6 +13,8 @@ import time
 """Starting the TCP server socket """
 serverPort = 7734
 serverName = socket.gethostbyname('localhost') # Lets use localhost for simplicity
+serverName = socket.gethostname() # Lets use localhost for simplicity
+#serverName = serverName + '.local' # If running on Mac Big Sur or later, un comment this one
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 serverSocket.bind((serverName,serverPort))
 serverSocket.listen(5)
