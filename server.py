@@ -3,24 +3,21 @@ Authors Stephen Bennett & Duy Ngyuen
 November 15, 2022
 """
 
-import socket
+import socket, random, platform, time
 import pickle as pickle
-import random
 from _thread import *
-import platform
-import time
 
 """Starting the TCP server socket """
-serverPort = 7734
-serverName = socket.gethostbyname('localhost') # Lets use localhost for simplicity
-serverName = socket.gethostname() # Lets use localhost for simplicity
+server_port = 7734
+#serverName = socket.gethostbyname('localhost') # Lets use localhost for simplicity
+server_name = socket.gethostname() # Lets use localhost for simplicity
 #serverName = serverName + '.local' # If running on Mac Big Sur or later, un comment this one
 serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-serverSocket.bind((serverName,serverPort))
+serverSocket.bind((server_name,server_port))
 serverSocket.listen(5)
 
 print('Starting server ...')
-print('Server name: ' + serverName)
+print('Server name: ' + server_name)
 
 """Initialize the structures for peer data """
 
