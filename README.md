@@ -1,50 +1,67 @@
 # Instruction to run the program 
 
-## Pre-requisites:
+This README file serves as an instruction for how to run and test the simple peer-to-peer (P2P) system with a centralized index (CI). Here are some highlighted deliverables of this project
+
+ - server processes that wait for connections,
+ - client processes that contact a well-known server and exchange data over the network,
+ - a simple application protocol and peers and server follow precisely the
+specifications for their side of the protocol in order to accomplish particular tasks,
+ - a centralized index at the server based on information provided by the peers, and
+ - a concurrent server that is capable of carrying out communication with multiple clients 
+simultaneously.
+
+# Pre-requisites:
+
+Make sure you have these items addressed before running the program
 
 - Python3 installed
 - Ensure the directory named "RFC" is in the same directory as client.
-- This entry is in `/etc/hosts` file: `127.0.0.1 localhost` (MacOS)
-- This folder exists: `./RFC`
+- Ensure this folder exists: `./RFC`
 - To run the code, make sure you're in the same dir with this README file
+
+# Run the program
+
+Assuming you're at the root of the project folder (same directory with this README file)
 
 ## Running server component:
 
-From one terminal session:
+From one terminal session, run this to start the server
+
 ```code
 $ python3 server.py
 ```
 
-Example output:
+You will see some output like this. Depending on what your workstation's domain name is, you will see the `Server name` shows up differently. Record it to use as input for running the peer component
 
 ```code
 Starting server ...
-Server name: 127.0.0.1
+Server name: D074CWTMVG
 ```
 
-In the example, `127.0.0.1` is the server name, record it to use as input for running the peer component
+In the example, `D074CWTMVG` is my server name
 
 ## Running client component 
 
-*Note:* Replicate this step to create more client peers 
+*Note:* Replicate this step to create more client peers as you wish
 
 From another terminal:
 ```
 $ python3 peer.py <ServerPort> <Server name> # This Server name value is from the output of Server component run
 ```
-Example:
+
+For example:
 
 ```code
-$ python3 peer.py 7734 localhost
-Connected to server at address: localhost and port: 7734
-Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
+$ python3 peer.py 7734 D074CWTMVG
+Connected to server at address: D074CWTMVG and port: 7734
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
 ```
 
-Once Client is up, please provide input for service request.
+Once the Client is up, you can start providing input for service request. Refer to the examples in the next section for more details as for how to run the peer side of the program
 
-## Examplle:
+## Examples of running the required commands (ADD, GET, LIST, LOOKUP, EXIT)
 
-### ADD:
+### ADD command
 
 Client side:
 
@@ -55,28 +72,35 @@ Enter RFC Number
 1
 Enter Title
 RFC1.txt
-ADD Request to be sent to the server
-ADD RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60671
+ADD request to be sent to the server:
+ADD RFC 1  P2P-CI/1.0
+Host: 192.168.86.164
+Port: 60636
+Title: RFC1.txt
+
+ADD response sent from the server:
+P2P-CI/1.0 200 OK
+Host: 192.168.86.164
+Port: 60636
 Title: RFC1.txt
 ```
 
-Server side output:
+With that example, you may see something like this on the server side:
 
 ```code
-Got incoming connection request from  ('127.0.0.1', 55004)
+Got incoming connection request from  ('192.168.86.164', 60841)
 Request received from the client
-ADD RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60972
+ADD RFC 1  P2P-CI/1.0
+Host: 192.168.86.164
+Port: 60636
 Title: RFC1.txt
 ```
 
+### GET command:
 
-### GET:
+If the system found the information requested, you will see something like this
 
-If info found:
+From Client side:
 
 ```code
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
@@ -87,162 +111,178 @@ Enter Title
 RFC1.txt
 LOOKUP Request to be sent to the server for completing the GET request
 LOOKUP RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60824
+Host: 192.168.86.164
+Port: 60636
 Title: RFC1.txt
 
 LOOKUP Response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60824
+RFC 1 RFC1.txt 192.168.86.164 60636
 
 GET request to be sent to the peer holding the RFC file
 GET RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
+Host: 192.168.86.164
 OS: macOS-12.6-arm64-arm-64bit
 
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 Connection with peer established
 GET message response:
 P2P-CI/1.0 200 OK
-Date: Sun, 20 Nov 2022 20:39:58 GMT
+Date: Mon, 05 Dec 2022 04:07:20 GMT
 OS: macOS-12.6-arm64-arm-64bit
-Last-Modified: Sun Nov 20 13:41:09 2022
+Last-Modified: Tue Nov 22 20:09:25 2022
 Content-Length: 21082
 Content-Type: text/plain
 
 Network Working Group                                   Steve Crocker
 Request for Comments: 1                                          UCLA
                                                          7 April 1969
+
+
+                         Title:   Host Software
+                        Author:   Steve Crocker
+                          Installation:   UCLA
+                          Date:   7 April 1969
+             Network Working Group Request for Comment:   1
 ........ more data here .........
 
 File Received from peer and stored locally now
 ```
 
-If there is no info found:
+If there is no info found, you will see something like this
+
 ```code
-$ python3 peer.py 7734 localhost
-Connected to server at address: localhost and port: 7734
-Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
+$ python3 peer.py 7734 D074CWTMVG
+Connected to server at address: D074CWTMVG and port: 7734
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 GET
 Enter RFC Number
-1
+10
 Enter Title
-RFC1.txt
+RFC10.txt
 LOOKUP Request to be sent to the server for completing the GET request
-LOOKUP RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60848
-Title: RFC1.txt
+LOOKUP RFC 10 P2P-CI/1.0
+Host: 192.168.86.164
+Port: 60092
+Title: RFC10.txt
 
 LOOKUP Response sent from the server
 P2P-CI/1.0 404 Not Found
 
 ```
 
-### LIST
+### LIST command
 
-peer side:
+On the client/peer side:
 
 ```code
-$ python3 peer.py 7734 localhost
-Connected to server at address: localhost and port: 7734
+$ python3 peer.py 7734 D074CWTMVG
+Connected to server at address: D074CWTMVG and port: 7734
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 LIST
 LIST request to be sent to the server
 LIST ALL P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60953
+Host: 192.168.86.164
+Port: 60209
 
 LIST Response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60824
-RFC 3 RFC3.txt 127.0.0.1 60300
-RFC 13 RFC13.txt 127.0.0.1 60953
+RFC 1 RFC1.txt 192.168.86.164 60636
+RFC 2 RFC2.txt 192.168.86.164 60092
+RFC 3 RFC3.txt 192.168.86.164 60092
 
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
 ```
 
-Server side:
+In the response details, you may notice that there are 3 records listed. The first RFC 1 belongs to the peer `192.168.86.164:60636`, the last 2 items belong to `192.168.86.164:60092`
+
+On server side, you may see something like this 
 
 ```code
 Request received from the client
 LIST ALL P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60887
+Host: 192.168.86.164
+Port: 60209
 ```
 
-### LOOKUP
+### LOOKUP command
 
-Client side:
+On any client/peer terminal, you can perform this LOOKUP command. Here is an example
 
 ```code
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 LOOKUP
 Enter RFC Number
-1
+4
 Enter Title
-RFC1.txt
+RFC4.txt
 LOOKUP request to be sent to the server
-LOOKUP RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60953
-Title: RFC1.txt
+LOOKUP RFC 4 P2P-CI/1.0
+Host: 192.168.86.164
+Port: 60209
+Title: RFC4.txt
 
 Retrieving response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60824
+RFC 4 RFC4.txt 192.168.86.164 60209
+
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 
 ```
 
-Server side:
+On server side, you may see this output
 
 ```code
 Request received from the client
-LOOKUP RFC 1 P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60953
-Title: RFC1.txt
+LOOKUP RFC 4 P2P-CI/1.0
+Host: 192.168.86.164
+Port: 60209
+Title: RFC4.txt
 ```
 
-### EXIT
+### EXIT command
 
-This command is issued from one of the active peers. From a random peer, issue a `LIST` command first to list all the peers in the system to verify:
+This command is issued from one of the active peers. From a arbitrary active peer terminal, issue a `LIST` command first to list all the peers in the system to verify:
 
 ```code
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 LIST
 LIST request to be sent to the server
 LIST ALL P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60824
+Host: 192.168.86.164
+Port: 60092
 
 LIST Response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60824
-RFC 3 RFC3.txt 127.0.0.1 60300
-RFC 13 RFC13.txt 127.0.0.1 60953
+RFC 1 RFC1.txt 192.168.86.164 60636
+RFC 2 RFC2.txt 192.168.86.164 60092
+RFC 3 RFC3.txt 192.168.86.164 60092
+RFC 4 RFC4.txt 192.168.86.164 60209
+
+Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter:
 ```
 
-We see that there currently are 3 active peers in the system. Now issue an EXIT command for a peer:
+We see that there currently are 3 active peers in the system. Now issue an EXIT command from a peer:
 
 ```code
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 EXIT
 ```
 
-and check the LIST command again from 1 of remaining peers, the resources associated with the EXITed peer should be removed out of the list
+and check the LIST command again from 1 of remaining peers, the resources associated with the EXITed peer should be removed out of the list. In this example, the record belongs to `192.168.86.164:60636` has been removed as the EXIT command was issued from `192.168.86.164:60636` peer's terminal
 
 ```code
 Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: 
 LIST
 LIST request to be sent to the server
 LIST ALL P2P-CI/1.0
-Host: 127.0.0.1
-Port: 60953
+Host: 192.168.86.164
+Port: 60092
 
 LIST Response sent from the server
 P2P-CI/1.0 200 OK
-RFC 1 RFC1.txt 127.0.0.1 60824
-RFC 13 RFC13.txt 127.0.0.1 60953
+RFC 2 RFC2.txt 192.168.86.164 60092
+RFC 3 RFC3.txt 192.168.86.164 60092
+RFC 4 RFC4.txt 192.168.86.164 60209
 
 ```

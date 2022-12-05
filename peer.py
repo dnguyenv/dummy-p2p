@@ -3,27 +3,28 @@ Authors Stephen Bennett & Duy Ngyuen
 November 15, 2022
 """
 
-import socket
-import os
+import socket, os, random, platform, time, sys, argparse
 import pickle as pickle
-import random
 from _thread import *
-import platform
-import time
 import email.utils
-import sys
+
 
 """ Getting server Information: Server IP address, port from command line """
-serverPort = int(sys.argv[1])
-serverName = sys.argv[2]
+
+p = argparse.ArgumentParser()
+p.add_argument("server_port", type=int)
+p.add_argument("server_name")
+args = p.parse_args()
+server_port = args.server_port
+server_name = args.server_name
 
 """ This is to store the RFCs that the client currently has at the starting time """
 client_RFC_list = {}	
 
 """ Connect to the server socket via TCP """
 clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-clientSocket.connect((serverName,serverPort))
-print(f'Connected to server at address: {serverName} and port: {serverPort}')
+clientSocket.connect((server_name,server_port))
+print(f'Connected to server at address: {server_name} and port: {server_port}')
 client_hostname=clientSocket.getsockname()[0]
 
 """Building ADD request message"""
@@ -153,7 +154,7 @@ def download_rfc_thread(req_message,peer_host_name,peer_port_number,rfc_number):
 """ This function handles GET, ADD, LOOKUP, LIST and EXIT commands"""
 def user_input():
 
-	print ('Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: ')
+	print(f'Type your desired command (ADD, GET, LIST, LOOKUP or EXIT) and hit Enter: ')
 
 	service = input()
 
