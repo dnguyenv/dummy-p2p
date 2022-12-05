@@ -286,3 +286,23 @@ RFC 3 RFC3.txt 192.168.86.164 60092
 RFC 4 RFC4.txt 192.168.86.164 60209
 
 ```
+
+## Tips for NCSU server setup 
+
+### Enable a to be accessible from outside
+
+TCP
+
+```code
+$ sudo iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport 7734 -j ACCEPT
+$ sudo ufw allow 7734 
+$ sudo ufw reload
+```
+
+or UDP
+
+```code
+$ sudo iptables -I INPUT -p udp -s 0.0.0.0/0 --dport 7734 -j ACCEPT
+$ sudo ufw allow 7734 
+$ sudo ufw reload
+```
