@@ -289,7 +289,7 @@ RFC 4 RFC4.txt 192.168.86.164 60209
 
 ## Tips for NCSU server setup 
 
-### Enable a to be accessible from outside
+### Enable a port/port range to be accessible from outside
 
 TCP
 
@@ -304,5 +304,13 @@ or UDP
 ```code
 $ sudo iptables -I INPUT -p udp -s 0.0.0.0/0 --dport 7734 -j ACCEPT
 $ sudo ufw allow 7734 
+$ sudo ufw reload
+```
+
+Allow a range:
+
+```code
+$ sudo iptables -I INPUT -p tcp -s 0.0.0.0/0 --dport 60000:65535 -j ACCEPT
+$ sudo ufw allow 60000:65535/tcp
 $ sudo ufw reload
 ```
