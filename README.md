@@ -10,6 +10,12 @@ specifications for their side of the protocol in order to accomplish particular 
  - a concurrent server that is capable of carrying out communication with multiple clients 
 simultaneously.
 
+# Architecture overview
+
+Here is the deployment overview of the application on NCSU VCL infrastructure
+
+![Arch](deployment.png)
+
 # Pre-requisites:
 
 Make sure you have these items addressed before running the program
